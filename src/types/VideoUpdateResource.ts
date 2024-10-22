@@ -18,6 +18,11 @@ export type VideoUpdateResource = {
   recordingDetails?: {
     recordingDate?: Date | string
   }
+  liveStreamingDetails?: {
+    actualStartTime?: Date | string;
+    actualEndTime?: Date | string;
+    scheduledStartTime?: Date | string;
+  };
   localizations?: {
     [key: string]: {
       title: string

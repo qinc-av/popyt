@@ -26,7 +26,7 @@ export class Video {
   public static fields = 'items(kind,id,' +
     'contentDetails,recordingDetails,' +
     'statistics,status,localizations,' +
-    'snippet)'
+    'liveStreamingDetails,snippet)'
 
   /**
    * YouTube object that created the video.
@@ -97,6 +97,15 @@ export class Video {
    */
   public _length: ISODuration
 
+  /**
+   * The livestream details of the video.
+   */
+  public liveStream: {
+    actualStartTime: Date
+    actualEndTime: Date
+    scheduledStartTime: Date
+  }
+       
   /**
    * The minutes of the video.
    */
@@ -203,7 +212,6 @@ export class Video {
     this.youtube = youtube
     this.data = data
     this.full = full
-
     this._init(data)
   }
 
@@ -222,6 +230,14 @@ export class Video {
         this._length = Parser.parseIsoDuration(video.contentDetails.duration)
         this.minutes = (this._length.hours * 60) + this._length.minutes
         this.seconds = this._length.seconds
+      }
+
+      if (video.liveStreamingDetails) {
+        this.liveStream = {
+          actualStartTime: new Date(video.liveStreamingDetails.actualStartTime),
+          actualEndTime: new Date(video.liveStreamingDetails.actualEndTime),
+          scheduledStartTime: new Date(video.liveStreamingDetails.scheduledStartTime)
+        }
       }
 
       if (video.recordingDetails?.recordingDate) {
